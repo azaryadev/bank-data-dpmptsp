@@ -42,7 +42,7 @@ const PublicHeader = () => {
                 <NavbarLogo />
                 <NavItems items={navItems} />
                 <div>
-                    <Link href={'/sign-in'}>
+                    <Link href={'/sign-in'} legacyBehavior>
                         <NavbarButton variant="secondary">
                             <Button variant="default" size="sm">
                                 Login

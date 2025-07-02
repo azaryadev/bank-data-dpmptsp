@@ -9,7 +9,9 @@ const Page = () => {
     return (
         <DotBackground>
             <PublicHeader />
-            Home
+            <div className=' flex justify-center items-center h-[3000px]'>
+                <h1>Home</h1>
+            </div>
             <PublicFooter />
         </DotBackground>
         // <div className="h-[3000px]">
