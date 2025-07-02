@@ -22,3 +22,9 @@ Check out the [Live Demo](https://ecme-react.themenate.net/) to explore the temp
 ### Guide
 Please visit our [Online documentation](https://ecme-react.themenate.net/guide/documentation/introduction) for detailed guides, setup instructions, and customization options.
 
+
+
+<!-- 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
+
+
+git remote set-url origin https://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@github.com/azaryadev/bank-data-dpmptsp.git -->

@@ -12,6 +12,7 @@ import {
     MobileNavMenu,
 } from './customComponents/resizable-navbar'
 import { Button } from './ui'
+import Link from 'next/link'
 
 const PublicHeader = () => {
     const navItems = [
@@ -41,9 +42,13 @@ const PublicHeader = () => {
                 <NavbarLogo />
                 <NavItems items={navItems} />
                 <div>
-                    <NavbarButton variant="secondary">
-                        <Button />
-                    </NavbarButton>
+                    <Link href={'/sign-in'}>
+                        <NavbarButton variant="secondary">
+                            <Button variant="default" size="sm">
+                                Login
+                            </Button>
+                        </NavbarButton>
+                    </Link>
                 </div>
             </NavBody>
             <MobileNav>

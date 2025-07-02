@@ -1,22 +1,19 @@
-"use client"
+'use client'
 import React from 'react'
-import Link from 'next/link'
-
-import { Button } from '@/components/ui'
 
 import PublicFooter from '@/components/PublicFooter'
 import PublicHeader from '@/components/PublicHeader'
+import { DotBackground } from '@/components/customComponents/DotBackground'
 
 const Page = () => {
     return (
-        <div>
+        <DotBackground>
             <PublicHeader />
-            <Link href={'/sign-in'}>
-                <Button variant="solid">Login</Button>
-            </Link>
             Home
             <PublicFooter />
-        </div>
+        </DotBackground>
+        // <div className="h-[3000px]">
+        // </div>
     )
 }
 
