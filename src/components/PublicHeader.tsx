@@ -44,7 +44,7 @@ const PublicHeader = () => {
                 <div>
                     <Link href={'/sign-in'} legacyBehavior>
                         <NavbarButton variant="secondary">
-                            <Button variant="default" size="sm">
+                            <Button variant="default" size="sm" className=' bg-black text-white hover:bg-gray-600 hover:text-white'>
                                 Login
                             </Button>
                         </NavbarButton>

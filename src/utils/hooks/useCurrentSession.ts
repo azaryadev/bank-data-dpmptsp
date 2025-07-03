@@ -7,6 +7,7 @@ const useCurrentSession = () => {
     return {
         session: context || {
             expires: '',
+            accessToken: '',
             user: {},
         },
     }

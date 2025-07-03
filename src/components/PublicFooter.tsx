@@ -5,7 +5,7 @@ import { IoMdMail } from 'react-icons/io'
 
 const PublicFooter = () => {
     return (
-        <div className="fixed bottom-0 bg-[#ffffff] w-full shadow-lg ">
+        <div className=" relative bg-[#ffffff] w-full shadow-lg z-50 ">
             <div className="px-[150px] py-12 grid grid-cols-7 gap-10 items-center ">
                 <div className=" col-span-2">
                     <Image
@@ -15,7 +15,7 @@ const PublicFooter = () => {
                         height={70}
                     />
                     <p className="mt-4 text-black">
-                        Aplikasi data bank dengan antarmuka publik untuk insight
+                        Aplikasi bank data dengan antarmuka publik untuk insight
                         terbuka dan sistem login berbasis peran untuk
                         pengelolaan data internal secara digital.
                     </p>

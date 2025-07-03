@@ -4,13 +4,17 @@ export type SignInCredential = {
 }
 
 export type SignInResponse = {
-    token: string
+    access_token: string
+    token_type: string
+    expires_in: number
+    expires_at: number
+    refresh_token: number
     user: {
-        userId: string
-        userName: string
-        authority: string[]
-        avatar: string
+        id: string
+        aud: string
+        role: string
         email: string
+        is_anonymous: boolean
     }
 }
 
@@ -48,6 +52,7 @@ export type User = {
     userName?: string | null
     email?: string | null
     authority?: string[]
+    profile: []
 }
 
 export type Token = {

@@ -21,8 +21,11 @@ const dropdownItemList: DropdownList[] = []
 const _UserDropdown = () => {
     const { session } = useCurrentSession()
 
+
     const handleSignOut = async () => {
-        await signOut()
+        if (session?.accessToken) {
+            await signOut(session.accessToken)
+        }
     }
 
     const avatarProps = {

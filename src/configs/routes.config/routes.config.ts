@@ -25,6 +25,14 @@ export const publicRoutes: Routes = {
             pageContainerType: 'contained',
         },
     },
+    '/data-insight': {
+        key: 'dataInsight',
+        authority: [],
+        meta: {
+            pageBackgroundType: 'plain',
+            pageContainerType: 'contained',
+        },
+    },
 }
 
 export const authRoutes = authRoute

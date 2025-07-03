@@ -3,7 +3,7 @@
 import Logo from '@/components/template/Logo'
 import Alert from '@/components/ui/Alert'
 import SignInForm from './SignInForm'
-import OauthSignIn from './OauthSignIn'
+// import OauthSignIn from './OauthSignIn'
 import ActionLink from '@/components/shared/ActionLink'
 import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage'
 import useTheme from '@/utils/hooks/useTheme'
@@ -18,10 +18,8 @@ type SignInProps = {
 }
 
 const SignIn = ({
-    signUpUrl = '/sign-up',
-    forgetPasswordUrl = '/forgot-password',
+    // forgetPasswordUrl = '/forgot-password',
     onSignIn,
-    onOauthSignIn,
 }: SignInProps) => {
     const [message, setMessage] = useTimeOutMessage()
 
@@ -52,18 +50,18 @@ const SignIn = ({
                 setMessage={setMessage}
                 passwordHint={
                     <div className="mb-7 mt-2">
-                        <ActionLink
+                        {/* <ActionLink
                             href={forgetPasswordUrl}
                             className="font-semibold heading-text mt-2 underline"
                             themeColor={false}
                         >
                             Forgot password
-                        </ActionLink>
+                        </ActionLink> */}
                     </div>
                 }
                 onSignIn={onSignIn}
             />
-            <div className="mt-8">
+            {/* <div className="mt-8">
                 <div className="flex items-center gap-2 mb-6">
                     <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
                     <p className="font-semibold heading-text">
@@ -75,16 +73,16 @@ const SignIn = ({
                     setMessage={setMessage}
                     onOauthSignIn={onOauthSignIn}
                 />
-            </div>
+            </div> */}
             <div>
                 <div className="mt-6 text-center">
                     <span>{`Don't have an account yet?`} </span>
                     <ActionLink
-                        href={signUpUrl}
+                        href={'/sign-in'}
                         className="heading-text font-bold"
                         themeColor={false}
                     >
-                        Sign up
+                        Contact Admin
                     </ActionLink>
                 </div>
             </div>
