@@ -12,7 +12,6 @@ import {
     MobileNavMenu,
 } from './customComponents/resizable-navbar'
 import { Button } from './ui'
-import Link from 'next/link'
 
 const PublicHeader = () => {
     const navItems = [
@@ -42,13 +41,13 @@ const PublicHeader = () => {
                 <NavbarLogo />
                 <NavItems items={navItems} />
                 <div>
-                    <Link href={'/sign-in'} legacyBehavior>
-                        <NavbarButton variant="secondary">
-                            <Button variant="default" size="sm" className=' bg-black text-white hover:bg-gray-600 hover:text-white'>
-                                Login
-                            </Button>
-                        </NavbarButton>
-                    </Link>
+                    <NavbarButton
+                        href={'/sign-in'}
+                        variant="secondary"
+                        className="bg-black text-white hover:bg-gray-600 hover:text-white"
+                    >
+                        Login
+                    </NavbarButton>
                 </div>
             </NavBody>
             <MobileNav>

@@ -78,14 +78,13 @@ const authConfig = {
                             Authorization: `Bearer ${data.access_token}`,
                             apikey: process.env.NEXT_SUPABASE_API_KEY!,
                         },
-                        body: JSON.stringify({
-                            email: credentials.email,
-                            password: credentials.password,
-                        }),
+
                     },
                 )
 
                 const dataProfile = await fetchProfile.json()
+
+
 
                 if (!res.ok || !data.access_token) {
                     throw new Error(
