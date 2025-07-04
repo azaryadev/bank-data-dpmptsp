@@ -9,63 +9,80 @@ const API_KEY = process.env.NEXT_PUBLIC_SUPABASE_API_KEY!
 type Filter = { [key: string]: string }
 
 interface SupabaseSWRParams {
-  filter?: Filter
-  page?: number
-  pageSize?: number
-  order?: { column: string; ascending?: boolean }
+    filter?: Filter
+    page?: number
+    pageSize?: number
+    order?: { column: string; ascending?: boolean }
+    select?: string // 👈 untuk relasi atau kolom spesifik
 }
 
 const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
-  const session = await getSession()
-  const accessToken = session?.accessToken
+    const session = await getSession()
+    const accessToken = session?.accessToken
 
-  if (!accessToken) throw new Error('Access token not found in session')
+    if (!accessToken) throw new Error('Access token not found in session')
 
-  const { filter, page = 1, pageSize = 10, order } = params || {}
+    const { filter, page = 1, pageSize = 10, order } = params || {}
 
-  const url = new URL(`${BASE_URL}/rest/v1/${table}`)
-  url.searchParams.append('select', '*')
+    const url = new URL(`${BASE_URL}/rest/v1/${table}`)
+    url.searchParams.append('select', params?.select || '*')
 
-  if (filter) {
-    for (const key in filter) {
-      url.searchParams.append(key, `eq.${filter[key]}`)
+    if (filter) {
+      for (const rawKey in filter) {
+          const val = filter[rawKey]
+          if (!val) continue
+  
+          const [key, operator] = rawKey.split('.')
+          if (operator) {
+              // contoh: created_at.gte => created_at=gte.2024-01-01
+              url.searchParams.append(key, `${operator}.${val}`)
+          } else {
+              // fallback default: ilike
+              url.searchParams.append(key, `ilike.*${val}*`)
+          }
+      }
+  }
+
+    // const from = (page-1) * pageSize
+    // const to = from + pageSize - 1
+    url.searchParams.append('offset', page.toString())
+    url.searchParams.append('limit', pageSize.toString())
+
+    if (order) {
+        url.searchParams.append(
+            'order',
+            `${order.column}.${order.ascending ? 'asc' : 'desc'}`,
+        )
     }
-  }
 
-  const from = (page - 1) * pageSize
-//   const to = from + pageSize - 1
-  url.searchParams.append('offset', from.toString())
-  url.searchParams.append('limit', pageSize.toString())
+    const res = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            apikey: API_KEY,
+            Authorization: `Bearer ${accessToken}`,
+            Prefer: 'count=exact', // 👈 Tambahkan ini
+        },
+        cache: 'no-store',
+     
+    })
 
-  if (order) {
-    url.searchParams.append('order', `${order.column}.${order.ascending ? 'asc' : 'desc'}`)
-  }
+    if (!res.ok) throw new Error(`Failed to fetch from ${table}`)
 
-  const res = await fetch(url.toString(), {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: API_KEY,
-      Authorization: `Bearer ${accessToken}`,
-    },
-    cache: 'no-store',
-  })
-
-  if (!res.ok) throw new Error(`Failed to fetch from ${table}`)
-
-  return res.json()
+      const data = await res.json()
+      const contentRange = res.headers.get('content-range')
+      const total = contentRange ? parseInt(contentRange.split('/')[1] || '0') : 0
+      
+      return { data, total }
 }
 
-export const useSupabaseSWR = (
-  table: string,
-  params?: SupabaseSWRParams
-) => {
-  const swrKey = table ? [table, params || {}] : null
+export const useSupabaseSWR = (table: string, params?: SupabaseSWRParams) => {
+    const swrKey = table ? [table, params || {}] : null
 
-  const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, {
-    revalidateOnFocus: true,
-    shouldRetryOnError: false,
-  })
+    const { data, error, isLoading, mutate } = useSWR(swrKey, fetcher, {
+        revalidateOnFocus: true,
+        shouldRetryOnError: false,
+    })
 
-  return { data, error, isLoading, mutate }
+    return { data, error, isLoading, mutate }
 }
