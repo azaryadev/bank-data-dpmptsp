@@ -1,22 +1,14 @@
-import {
-    PiHouseLineDuotone,
-    PiArrowsInDuotone,
-    PiBookOpenUserDuotone,
-    PiBookBookmarkDuotone,
-    PiAcornDuotone,
-    PiBagSimpleDuotone,
-} from 'react-icons/pi'
 import type { JSX } from 'react'
+
+import { HiDocument, HiHome, HiDocumentText } from 'react-icons/hi2'
 
 export type NavigationIcons = Record<string, JSX.Element>
 
 const navigationIcon: NavigationIcons = {
-    home: <PiHouseLineDuotone />,
-    singleMenu: <PiAcornDuotone />,
-    collapseMenu: <PiArrowsInDuotone />,
-    groupSingleMenu: <PiBookOpenUserDuotone />,
-    groupCollapseMenu: <PiBookBookmarkDuotone />,
-    groupMenu: <PiBagSimpleDuotone />,
+    home: <HiHome />,
+
+    document: <HiDocument />,
+    document2: <HiDocumentText />,
 }
 
 export default navigationIcon

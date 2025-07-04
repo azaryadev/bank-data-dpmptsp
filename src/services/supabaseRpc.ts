@@ -8,7 +8,7 @@ export async function callSupabaseRPC<T = any>(
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                apikey: process.env.NEXT_SUPABASE_API_KEY!,
+                apikey: process.env.NEXT_PUBLIC_SUPABASE_API_KEY!,
             },
             // Cache options (opsional):
             // next: { revalidate: 0 }, // Untuk server fetch tanpa cache

@@ -14,7 +14,7 @@ const refreshAccessToken = async (token: any) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    apikey: process.env.NEXT_SUPABASE_API_KEY!,
+                    apikey: process.env.NEXT_PUBLIC_SUPABASE_API_KEY!,
                 },
                 body: JSON.stringify({
                     refresh_token: token.refreshToken,
@@ -58,7 +58,7 @@ const authConfig = {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            apikey: process.env.NEXT_SUPABASE_API_KEY!,
+                            apikey: process.env.NEXT_PUBLIC_SUPABASE_API_KEY!,
                         },
                         body: JSON.stringify({
                             email: credentials.email,
@@ -76,15 +76,12 @@ const authConfig = {
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${data.access_token}`,
-                            apikey: process.env.NEXT_SUPABASE_API_KEY!,
+                            apikey: process.env.NEXT_PUBLIC_SUPABASE_API_KEY!,
                         },
-
                     },
                 )
 
                 const dataProfile = await fetchProfile.json()
-
-
 
                 if (!res.ok || !data.access_token) {
                     throw new Error(

@@ -10,6 +10,38 @@ export const protectedRoutes: Routes = {
             pageContainerType: 'contained',
         },
     },
+    '/siup': {
+        key: 'siup',
+        authority: [],
+        meta: {
+            pageBackgroundType: 'plain',
+            pageContainerType: 'contained',
+        },
+    },
+    '/kategori-usaha': {
+        key: 'siup.kategoriusaha',
+        authority: [],
+        meta: {
+            pageBackgroundType: 'plain',
+            pageContainerType: 'contained',
+        },
+    },
+    '/perizinan': {
+        key: 'izin',
+        authority: [],
+        meta: {
+            pageBackgroundType: 'plain',
+            pageContainerType: 'contained',
+        },
+    },
+    '/surat-izin': {
+        key: 'izin.suratizin',
+        authority: [],
+        meta: {
+            pageBackgroundType: 'plain',
+            pageContainerType: 'contained',
+        },
+    },
 }
 
 export const publicRoutes: Routes = {
