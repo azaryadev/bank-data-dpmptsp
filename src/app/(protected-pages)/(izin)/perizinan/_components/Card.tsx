@@ -54,7 +54,7 @@ const CardPerizinan = () => {
     const [valueEndDate, setValueEndDate] = useState<Date | null>(null)
 
     const filteringParams = {
-        tahun: useDebounce(valueYear, 500),
+        'tahun.eq': useDebounce(valueYear, 500),
         'created_at.gte': valueStartDate
             ? formatedDate(valueStartDate).toString()
             : '',
