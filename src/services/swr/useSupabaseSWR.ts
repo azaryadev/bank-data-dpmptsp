@@ -28,25 +28,26 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
     url.searchParams.append('select', params?.select || '*')
 
     if (filter) {
-      for (const rawKey in filter) {
-          const val = filter[rawKey]
-          if (!val) continue
-  
-          const [key, operator] = rawKey.split('.')
-          if (operator) {
-              // contoh: created_at.gte => created_at=gte.2024-01-01
-              url.searchParams.append(key, `${operator}.${val}`)
-          } else {
-              // fallback default: ilike
-              url.searchParams.append(key, `ilike.*${val}*`)
-          }
-      }
-  }
+        for (const rawKey in filter) {
+            const val = filter[rawKey]
+            if (!val) continue
 
-    // const from = (page-1) * pageSize
-    // const to = from + pageSize - 1
-    url.searchParams.append('offset', page.toString())
-    url.searchParams.append('limit', pageSize.toString())
+            const [key, operator] = rawKey.split('.')
+            if (operator) {
+                // contoh: created_at.gte => created_at=gte.2024-01-01
+                url.searchParams.append(key, `${operator}.${val}`)
+            } else {
+                // fallback default: ilike
+                url.searchParams.append(key, `ilike.*${val}*`)
+            }
+        }
+    }
+
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
+    // url.searchParams.append('offset', page.toString())
+    // url.searchParams.append('limit', pageSize.toString())
+
 
     if (order) {
         url.searchParams.append(
@@ -55,25 +56,30 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
         )
     }
 
+    const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        apikey: API_KEY,
+        Authorization: `Bearer ${accessToken}`,
+        Prefer: 'count=exact',
+    }
+
+    // Tambahkan header Range untuk pagination
+    headers['Range'] = `${from}-${to}`
+
     const res = await fetch(url.toString(), {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            apikey: API_KEY,
-            Authorization: `Bearer ${accessToken}`,
-            Prefer: 'count=exact', // 👈 Tambahkan ini
-        },
+        headers,
         cache: 'no-store',
-     
+
     })
 
     if (!res.ok) throw new Error(`Failed to fetch from ${table}`)
 
-      const data = await res.json()
-      const contentRange = res.headers.get('content-range')
-      const total = contentRange ? parseInt(contentRange.split('/')[1] || '0') : 0
-      
-      return { data, total }
+    const data = await res.json()
+    const contentRange = res.headers.get('content-range')
+    const total = contentRange ? parseInt(contentRange.split('/')[1] || '0') : 0
+
+    return { data, total }
 }
 
 export const useSupabaseSWR = (table: string, params?: SupabaseSWRParams) => {

@@ -1,12 +1,8 @@
 'use client'
-import {
-    Tooltip,
-    Table,
-    Button,
-    Tag,
-    Pagination,
-    Select,
-} from '@/components/ui'
+import React, { useMemo, useState } from 'react'
+// import { useRouter } from 'next/navigation'
+
+import { Tooltip, Table, Button, Pagination, Select } from '@/components/ui'
 import classNames from '@/utils/classNames'
 import {
     ColumnDef,
@@ -20,11 +16,6 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 
-import moment from 'moment'
-
-// import { useRouter } from 'next/navigation'
-import React, { useMemo, useState } from 'react'
-
 const { Tr, Th, Td, THead, TBody, Sorter } = Table
 
 const pageSizeOption = [
@@ -34,31 +25,14 @@ const pageSizeOption = [
     { value: 40, label: '40 / page' },
     { value: 50, label: '50 / page' },
 ]
-
-type BodySiup = {
+type BodyKategoriUsaha = {
     id: string
-    nomor_advis: string
-    nama_perusahaan: string
-    penanggung_jawab: string
-    alamat_perusahaan: string
-    kekayaan_bersih_rp: number
-    kelembagaan: string
-    kegiatan_usaha_kbli: string
-    direktur: string
-    barang_jasa_utama: string
-    tanggal_keluar: string
-    created_by: string
-    created_at: string
-    updated_at: string
-    kategori_usaha_id: string
-    kategori_usaha: {
-        id: string
-        name: string
-    }
+    name: string
+    description: string
 }
 
-type TableSiupProps = {
-    data?: BodySiup[] | undefined
+type TableKategoriUsahaProps = {
+    data?: BodyKategoriUsaha[] | undefined
     page: number
     pageSize: number
     setPage: (page: number) => void
@@ -68,7 +42,7 @@ type TableSiupProps = {
     setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 }
 
-const TableSiup: React.FC<TableSiupProps> = ({
+const TableKategoriUsaha: React.FC<TableKategoriUsahaProps> = ({
     data,
     page,
     setPage,
@@ -93,13 +67,13 @@ const TableSiup: React.FC<TableSiupProps> = ({
     const [id, setId] = useState<string | undefined>(undefined)
     console.log('selected id: ', id)
 
-    const columns = useMemo<ColumnDef<BodySiup>[]>(
+    const columns = useMemo<ColumnDef<BodyKategoriUsaha>[]>(
         () => [
             {
                 header: (header) => (
                     <div className="flex items-center justify-left">
                         {' '}
-                        Nomor Advis
+                        Name
                         <Tooltip
                             title={
                                 header.column.getIsSorted() === 'asc'
@@ -113,10 +87,10 @@ const TableSiup: React.FC<TableSiupProps> = ({
                         </Tooltip>
                     </div>
                 ),
-                accessorKey: 'nomor_advis',
+                accessorKey: 'name',
                 cell: ({ getValue }) => (
                     <div
-                        style={{ width: '200px' }}
+                        style={{ width: '150px' }}
                         className="  text-left" // Centered content
                     >
                         {getValue() as string}
@@ -127,7 +101,7 @@ const TableSiup: React.FC<TableSiupProps> = ({
                 header: (header) => (
                     <div className="flex items-center justify-left">
                         {' '}
-                        Name Perusahaan
+                        Description
                         <Tooltip
                             title={
                                 header.column.getIsSorted() === 'asc'
@@ -141,7 +115,7 @@ const TableSiup: React.FC<TableSiupProps> = ({
                         </Tooltip>
                     </div>
                 ),
-                accessorKey: 'nama_perusahaan',
+                accessorKey: 'description',
                 cell: ({ getValue }) => {
                     return (
                         <div
@@ -153,98 +127,13 @@ const TableSiup: React.FC<TableSiupProps> = ({
                 },
                 enableSorting: true,
             },
-
-            {
-                header: (header) => (
-                    <div className="flex items-center justify-left">
-                        {' '}
-                        Kategori Usaha
-                        <Tooltip
-                            title={
-                                header.column.getIsSorted() === 'asc'
-                                    ? 'Sorted Ascending'
-                                    : header.column.getIsSorted() === 'desc'
-                                      ? 'Sorted Descending'
-                                      : 'Click to Sort'
-                            }
-                        >
-                            <Sorter sort={header.column.getIsSorted()} />{' '}
-                        </Tooltip>
-                    </div>
-                ),
-                accessorKey: 'kategori_usaha.name',
-                cell: ({ getValue }) => {
-                    const value = getValue() as boolean
-
-                    return (
-                        <div
-                            style={{ width: '100px', minWidth: '100px' }}
-                            className="text-center"
-                        >
-                            <Tag className="bg-emerald-100 py-1 px-2.5 text-emerald-600 border-0 rounded">
-                                {value}
-                            </Tag>
-                        </div>
-                    )
-                },
-            },
-
-            {
-                header: (header) => (
-                    <div className="flex items-center justify-left">
-                        {' '}
-                        Tanggal Keluar
-                        <Tooltip
-                            title={
-                                header.column.getIsSorted() === 'asc'
-                                    ? 'Sorted Ascending'
-                                    : header.column.getIsSorted() === 'desc'
-                                      ? 'Sorted Descending'
-                                      : 'Click to Sort'
-                            }
-                        >
-                            <Sorter sort={header.column.getIsSorted()} />{' '}
-                        </Tooltip>
-                    </div>
-                ),
-                accessorKey: 'tanggal_keluar',
-                cell: ({ getValue }) => {
-                    const value = getValue() as string
-                    const date = moment(value)
-                    if (date.isValid()) {
-                        return <div>{date.format('YYYY-MM-DD')}</div>
-                    } else {
-                        return <p>-</p>
-                    }
-                },
-            },
-
             {
                 header: 'Actions',
                 id: 'actions',
                 enableSorting: false,
                 cell: ({ row }) => (
                     <div className="flex flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
-                        <Button
-                            size="xs"
-                            variant="solid"
-                            customColorClass={({ active, unclickable }) =>
-                                classNames(
-                                    'hover:text-white dark:hover:bg-blue-600 border-0 hover:ring-0',
-                                    active ? 'bg-blue-600' : 'bg-blue-500',
-                                    unclickable &&
-                                        'opacity-50 cursor-not-allowed',
-                                    !active &&
-                                        !unclickable &&
-                                        'hover:bg-blue-600',
-                                )
-                            }
-                            onClick={() => {
-                                setId(row.original.id)
-                            }}
-                        >
-                            Detail
-                        </Button>
+                       
                         <Button
                             size="xs"
                             variant="solid"
@@ -416,4 +305,4 @@ const TableSiup: React.FC<TableSiupProps> = ({
     )
 }
 
-export default TableSiup
+export default TableKategoriUsaha

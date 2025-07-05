@@ -70,7 +70,7 @@ const authConfig = {
                 const data = await res.json()
 
                 const fetchProfile = await fetch(
-                    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/user_profiles?id=eq.${data.user.id}&select=*,roles(id,name)`,
+                    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/user_profiles?id=eq.${data?.user?.id}&select=*,roles(id,name)`,
                     {
                         method: 'GET',
                         headers: {
