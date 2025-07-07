@@ -67,10 +67,25 @@ const CardSiup = () => {
             : '',
     }
 
-    const { data, error, isLoading, mutate : mutateSiupData } = useSupabaseSWR('siup_data', {
+    const {
+        data,
+        error,
+        isLoading,
+        mutate: mutateSiupData,
+    } = useSupabaseSWR('siup_data', {
         page: page,
         pageSize: pageSize,
-        select: selectRelation(['*'], ['kategori_usaha(id,name)']),
+        select: selectRelation(
+            [
+                'id',
+                'nomor_advis',
+                'nama_perusahaan',
+                'tanggal_keluar',
+                'kategori_usaha_id',
+                'created_at',
+            ],
+            ['kategori_usaha(id,name)'],
+        ),
         order:
             sorting.length > 0
                 ? {
@@ -78,9 +93,9 @@ const CardSiup = () => {
                       ascending: !sorting[0].desc,
                   }
                 : {
-                    column: "created_at",
-                    ascending: false,
-                }, // atau null, tergantung API kamu
+                      column: 'created_at',
+                      ascending: false,
+                  }, // atau null, tergantung API kamu
         filter: filteringParams,
     })
 
