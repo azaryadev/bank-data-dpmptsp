@@ -63,7 +63,12 @@ const CardPerizinan = () => {
             : '',
     }
 
-    const { data, error, isLoading } = useSupabaseSWR('rekap_izin', {
+    const {
+        data,
+        error,
+        isLoading,
+        mutate: refreshData,
+    } = useSupabaseSWR('rekap_izin', {
         page: page,
         pageSize: pageSize,
         select: selectRelation(['*'], ['surat_izin(id,name)']),
@@ -77,10 +82,8 @@ const CardPerizinan = () => {
         filter: filteringParams,
     })
 
-    const filteredData = data?.data.filter((item : any) =>
-        item.surat_izin?.name
-            ?.toLowerCase()
-            .includes(valueName.toLowerCase())
+    const filteredData = data?.data.filter((item: any) =>
+        item.surat_izin?.name?.toLowerCase().includes(valueName.toLowerCase()),
     )
 
     console.log('data', data)
@@ -188,6 +191,7 @@ const CardPerizinan = () => {
                                 totalRecords={data?.total}
                                 sorting={sorting}
                                 setSorting={setSorting}
+                                refresh={refreshData}
                             />
                         </>
                     )

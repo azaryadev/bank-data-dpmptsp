@@ -15,7 +15,12 @@ const CardKategoriUsaha = () => {
     const [pageSize, setPageSize] = useState(10)
     const [sorting, setSorting] = useState<SortingState>([]) // State for sorting
 
-    const { data, error, isLoading } = useSupabaseSWR('kategori_usaha', {
+    const {
+        data,
+        error,
+        isLoading,
+        mutate: refreshData,
+    } = useSupabaseSWR('kategori_usaha', {
         page: page,
         pageSize: pageSize,
         select: '*',
@@ -86,6 +91,7 @@ const CardKategoriUsaha = () => {
                                 totalRecords={data?.total}
                                 sorting={sorting}
                                 setSorting={setSorting}
+                                refresh={refreshData}
                             />
                         </>
                     )

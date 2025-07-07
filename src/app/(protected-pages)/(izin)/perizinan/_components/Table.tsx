@@ -70,6 +70,7 @@ type TablePerizinanProps = {
     totalRecords: number | undefined
     sorting: SortingState // Add sorting prop
     setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+    refresh: () => void
 }
 
 const TablePerizinan: React.FC<TablePerizinanProps> = ({
@@ -81,6 +82,7 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
     totalRecords,
     sorting,
     setSorting,
+    refresh,
 }) => {
     const totalData = data ? data.length : 0
 

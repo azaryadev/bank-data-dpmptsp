@@ -39,6 +39,7 @@ type TableSuratIzinProps = {
     totalRecords: number | undefined
     sorting: SortingState // Add sorting prop
     setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+    refresh: () => void
 }
 
 const TableSuratIzin: React.FC<TableSuratIzinProps> = ({
@@ -50,6 +51,7 @@ const TableSuratIzin: React.FC<TableSuratIzinProps> = ({
     totalRecords,
     sorting,
     setSorting,
+    refresh
 }) => {
     const totalData = data ? data.length : 0
     // const router = useRouter()

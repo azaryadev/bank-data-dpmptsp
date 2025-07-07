@@ -40,6 +40,7 @@ type TableKategoriUsahaProps = {
     totalRecords: number | undefined
     sorting: SortingState // Add sorting prop
     setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+    refresh: () => void
 }
 
 const TableKategoriUsaha: React.FC<TableKategoriUsahaProps> = ({
@@ -51,6 +52,7 @@ const TableKategoriUsaha: React.FC<TableKategoriUsahaProps> = ({
     totalRecords,
     sorting,
     setSorting,
+    refresh
 }) => {
     const totalData = data ? data.length : 0
 

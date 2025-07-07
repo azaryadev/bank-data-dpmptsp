@@ -22,7 +22,12 @@ const CardSuratIzin = () => {
         name: useDebounce(valueName, 500),
     }
 
-    const { data, error, isLoading } = useSupabaseSWR('surat_izin', {
+    const {
+        data,
+        error,
+        isLoading,
+        mutate: refreshData,
+    } = useSupabaseSWR('surat_izin', {
         page: page,
         pageSize: pageSize,
         select: '*',
@@ -104,6 +109,7 @@ const CardSuratIzin = () => {
                                 totalRecords={data?.total}
                                 sorting={sorting}
                                 setSorting={setSorting}
+                                refresh={refreshData}
                             />
                         </>
                     )
