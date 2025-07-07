@@ -28,9 +28,13 @@ import { useSupabaseSWR } from '@/services/swr/useSupabaseSWR'
 import { IoCreateOutline } from 'react-icons/io5'
 import { selectRelation } from '@/utils/selectRelation'
 
+import { useRouter } from 'next/navigation'
+
 type DateFormType = z.infer<typeof validationDateParams>
 
 const CardSiup = () => {
+    const router = useRouter()
+
     const {
         setValue,
         formState: { errors },
@@ -63,20 +67,20 @@ const CardSiup = () => {
             : '',
     }
 
-    const { data, error, isLoading } = useSupabaseSWR('siup_data', {
+    const { data, error, isLoading, mutate : mutateSiupData } = useSupabaseSWR('siup_data', {
         page: page,
         pageSize: pageSize,
-        select: selectRelation(
-            ['*'],
-            ['kategori_usaha(id,name)'],
-        ),
+        select: selectRelation(['*'], ['kategori_usaha(id,name)']),
         order:
             sorting.length > 0
                 ? {
                       column: sorting[0].id,
                       ascending: !sorting[0].desc,
                   }
-                : undefined, // atau null, tergantung API kamu
+                : {
+                    column: "created_at",
+                    ascending: false,
+                }, // atau null, tergantung API kamu
         filter: filteringParams,
     })
 
@@ -106,7 +110,9 @@ const CardSiup = () => {
                     <Button
                         className=" items-center flex gap-2"
                         size="sm"
-                        onClick={() => {}}
+                        onClick={() => {
+                            router.push('/siup/create')
+                        }}
                         icon={<IoCreateOutline />}
                         iconAlignment="start"
                     >
@@ -188,6 +194,7 @@ const CardSiup = () => {
                                 totalRecords={data?.total}
                                 sorting={sorting}
                                 setSorting={setSorting}
+                                refresh={mutateSiupData}
                             />
                         </>
                     )

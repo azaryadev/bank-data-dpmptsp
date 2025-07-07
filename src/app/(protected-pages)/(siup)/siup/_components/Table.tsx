@@ -1,4 +1,5 @@
 'use client'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import {
     Tooltip,
     Table,
@@ -6,7 +7,10 @@ import {
     Tag,
     Pagination,
     Select,
+    toast,
+    Notification,
 } from '@/components/ui'
+import { useSupabaseMutation } from '@/services/swr/useSupabaseMutation'
 import classNames from '@/utils/classNames'
 import {
     ColumnDef,
@@ -66,6 +70,7 @@ type TableSiupProps = {
     totalRecords: number | undefined
     sorting: SortingState // Add sorting prop
     setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+    refresh: () => void
 }
 
 const TableSiup: React.FC<TableSiupProps> = ({
@@ -77,6 +82,7 @@ const TableSiup: React.FC<TableSiupProps> = ({
     totalRecords,
     sorting,
     setSorting,
+    refresh
 }) => {
     const totalData = data ? data.length : 0
 
@@ -90,8 +96,59 @@ const TableSiup: React.FC<TableSiupProps> = ({
         }
     }
 
+    const {
+        mutate,
+        isLoading: isLoadingDelete,
+        error: errorDelete,
+    } = useSupabaseMutation('siup_data', 'DELETE')
+
+    const [isConfirmDelete, setIsConfirmDelete] = useState(false)
     const [id, setId] = useState<string | undefined>(undefined)
     console.log('selected id: ', id)
+
+    const onHandleDelete = async (id: string | undefined): Promise<void> => {
+        if (id === undefined) return
+
+        try {
+            const res = await mutate(undefined, { id })
+
+            if (res) {
+                setTimeout(() => {
+                    setIsConfirmDelete(false)
+                }, 500)
+
+                setTimeout(() => {
+                    toast.push(
+                        <Notification title="Success" type="success">
+                            Successfully delete data
+                        </Notification>,
+                    )
+                }, 1500)
+                setTimeout(() => {
+                  refresh()
+                }, 2500)
+            }
+
+            if (errorDelete) {
+                setIsConfirmDelete(true)
+                setTimeout(() => {
+                    toast.push(
+                        <Notification title="Error" type="danger">
+                            Error to deleting data.
+                        </Notification>,
+                    )
+                }, 500)
+            }
+        } catch (error) {
+            if (error || errorDelete) {
+                toast.push(
+                    <Notification title="Error" type="danger">
+                        Failed to delete data.
+                    </Notification>,
+                )
+            }
+        }
+    }
 
     const columns = useMemo<ColumnDef<BodySiup>[]>(
         () => [
@@ -277,7 +334,10 @@ const TableSiup: React.FC<TableSiupProps> = ({
                                         'hover:bg-red-600',
                                 )
                             }
-                            onClick={() => {}}
+                            onClick={() => {
+                                setId(row.original.id)
+                                setIsConfirmDelete(true)
+                            }}
                         >
                             Delete
                         </Button>
@@ -412,6 +472,28 @@ const TableSiup: React.FC<TableSiupProps> = ({
                     />
                 </div>
             </div>
+
+            <ConfirmDialog
+                isOpen={isConfirmDelete}
+                title="Delete Data"
+                confirmText={isLoadingDelete ? 'Deleting...' : 'Yes'}
+                cancelText="Cancel"
+                type="warning"
+                closable={false}
+                onCancel={() => {
+                    setIsConfirmDelete(false)
+                }}
+                onConfirm={() => {
+                    onHandleDelete(id)
+                }}
+            >
+                <p>
+                    You’re about to permanently delete this data and its
+                    dependencies. <br />
+                    <br />
+                    If you’re not sure, you can select cancel instead
+                </p>
+            </ConfirmDialog>
         </>
     )
 }

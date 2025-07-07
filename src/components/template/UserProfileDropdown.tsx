@@ -21,7 +21,6 @@ const dropdownItemList: DropdownList[] = []
 const _UserDropdown = () => {
     const { session } = useCurrentSession()
 
-
     const handleSignOut = async () => {
         if (session?.accessToken) {
             await signOut(session.accessToken)
@@ -50,7 +49,8 @@ const _UserDropdown = () => {
                     <Avatar {...avatarProps} />
                     <div>
                         <div className="font-bold text-gray-900 dark:text-gray-100">
-                            {session?.user?.name || 'Anonymous'}
+                            {`${session?.user?.profile.first_name} ${session?.user?.profile.last_name}` ||
+                                'Anonymous'}
                         </div>
                         <div className="text-xs">
                             {session?.user?.email || 'No email available'}

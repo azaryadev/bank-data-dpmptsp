@@ -12,24 +12,31 @@ type Filter = { [key: string]: string }
 export const useSupabaseMutation = (
     table: string,
     method: 'POST' | 'PATCH' | 'DELETE',
-    filter?: Filter,
 ) => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<Error | null>(null)
 
-    const mutate = async (payload?: any) => {
+    const mutate = async (
+        payload?: any,
+        dynamicFilter?: Filter // 👈 bisa digunakan saat dipanggil
+    ) => {
         setIsLoading(true)
         try {
             const session = await getSession()
-            const accessToken = session?.accessToken 
+            const accessToken = session?.accessToken
             if (!accessToken)
                 throw new Error('Access token not found in session')
 
             let url = `${BASE_URL}/rest/v1/${table}`
-            if (filter && (method === 'PATCH' || method === 'DELETE')) {
+
+            // Apply dynamic filter (only for PATCH or DELETE)
+            if (
+                dynamicFilter &&
+                (method === 'PATCH' || method === 'DELETE')
+            ) {
                 const query = new URLSearchParams()
-                for (const key in filter) {
-                    query.append(key, `eq.${filter[key]}`)
+                for (const key in dynamicFilter) {
+                    query.append(key, `eq.${dynamicFilter[key]}`)
                 }
                 url += `?${query.toString()}`
             }
