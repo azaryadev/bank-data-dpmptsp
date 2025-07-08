@@ -9,12 +9,16 @@ import TableSkeleton from '@/components/shared/loaders/TableSkeleton'
 import { SortingState } from '@tanstack/react-table'
 import { useSupabaseSWR } from '@/services/swr/useSupabaseSWR'
 import { IoCreateOutline } from 'react-icons/io5'
+import { useRouter } from 'next/navigation'
+
+
 
 const CardKategoriUsaha = () => {
     const [page, setPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [sorting, setSorting] = useState<SortingState>([]) // State for sorting
 
+    const router = useRouter()
     const {
         data,
         error,
@@ -59,7 +63,7 @@ const CardKategoriUsaha = () => {
                     <Button
                         className=" items-center flex gap-2"
                         size="sm"
-                        onClick={() => {}}
+                        onClick={() => {router.push("/kategori-usaha/create")}}
                         icon={<IoCreateOutline />}
                         iconAlignment="start"
                     >
