@@ -70,30 +70,34 @@ const PageDetail = ({ params }: { params: Promise<{ id: string }> }) => {
                         <h3>Detail Information</h3>
                         <p>Surat Izin Usaha Perdagangan</p>
                     </div>
-                    <div
-                        onClick={() =>
-                            downloadBase64Pdf(
-                                selectedData.documents,
-                                `${selectedData.nomor_advis}.pdf`,
-                            )
-                        }
-                        className="bg-white w-fit rounded-xl dark:bg-gray-800 border border-gray-200 dark:border-transparent p-2.5 lg:p-3.5 flex items-center gap-2 transition-all hover:shadow-[0_0_1rem_0.25rem_rgba(0,0,0,0.04),0px_2rem_1.5rem_-1rem_rgba(0,0,0,0.12)] cursor-pointer"
-                        role="button"
-                    >
-                        <div className="text-3xl">
-                            <FilePdf width={35} height={35} />
-                        </div>
-                        <div>
-                            <div className="font-bold heading-text">
-                                {selectedData.nomor_advis}.pdf
+                    {selectedData.documents === null ? (
+                        <></>
+                    ) : (
+                        <div
+                            onClick={() =>
+                                downloadBase64Pdf(
+                                    selectedData.documents,
+                                    `${selectedData.nomor_advis}.pdf`,
+                                )
+                            }
+                            className="bg-white w-fit rounded-xl dark:bg-gray-800 border border-gray-200 dark:border-transparent p-2.5 lg:p-3.5 flex items-center gap-2 transition-all hover:shadow-[0_0_1rem_0.25rem_rgba(0,0,0,0.04),0px_2rem_1.5rem_-1rem_rgba(0,0,0,0.12)] cursor-pointer"
+                            role="button"
+                        >
+                            <div className="text-3xl">
+                                <FilePdf width={35} height={35} />
                             </div>
-                            <span className="text-xs">
-                                {selectedData.documents
-                                    ? `${(getBase64FileSize(selectedData.documents) / 1024).toFixed(2)} KB`
-                                    : '250'}
-                            </span>
+                            <div>
+                                <div className="font-bold heading-text">
+                                    {selectedData.nomor_advis}.pdf
+                                </div>
+                                <span className="text-xs">
+                                    {selectedData.documents
+                                        ? `${(getBase64FileSize(selectedData.documents) / 1024).toFixed(2)} KB`
+                                        : '250 Kb'}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div className=" grid grid-cols-3 gap-4">
                     <CardInformation
@@ -187,7 +191,9 @@ const PageDetail = ({ params }: { params: Promise<{ id: string }> }) => {
                     <Button
                         className="ltr:mr-2 rtl:ml-2"
                         variant="solid"
-                        onClick={() => {router.back()}}
+                        onClick={() => {
+                            router.back()
+                        }}
                     >
                         Kembali
                     </Button>

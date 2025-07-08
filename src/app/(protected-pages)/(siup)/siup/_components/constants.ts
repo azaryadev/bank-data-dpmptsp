@@ -1,11 +1,11 @@
 export const optionsKelembagaan: { value: string; label: string }[] = [
-    { value: 'pemasok', label: 'Pemasok' },
-    { value: 'pengecer', label: 'pengecer' },
+    { value: 'PEMASOK', label: 'PEMASOK' },
+    { value: 'PENGECER', label: 'PENGECER' },
 ]
 
 export const optionsBarangJasaUtama: { value: string; label: string }[] = [
     {
-        value: 'Perdagangan Barang dan Jasa',
+        value: 'PERDAGANGAN BARANG & JASA',
         label: 'Perdagangan Barang & Jasa',
     },
 ]

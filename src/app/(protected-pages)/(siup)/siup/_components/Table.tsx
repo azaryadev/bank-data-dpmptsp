@@ -317,7 +317,9 @@ const TableSiup: React.FC<TableSiupProps> = ({
                                         'hover:bg-yellow-600',
                                 )
                             }
-                            onClick={() => {}}
+                            onClick={() => {
+                                router.push(`/siup/update/${row.original.id}`)
+                            }}
                         >
                             Update
                         </Button>
