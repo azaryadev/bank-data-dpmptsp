@@ -26,7 +26,7 @@ import {
 
 import moment from 'moment'
 
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
 
 const { Tr, Th, Td, THead, TBody, Sorter } = Table
@@ -82,11 +82,11 @@ const TableSiup: React.FC<TableSiupProps> = ({
     totalRecords,
     sorting,
     setSorting,
-    refresh
+    refresh,
 }) => {
     const totalData = data ? data.length : 0
 
-    // const router = useRouter()
+    const router = useRouter()
 
     const handleSortingChange: OnChangeFn<SortingState> = (updaterOrValue) => {
         if (typeof updaterOrValue === 'function') {
@@ -125,7 +125,7 @@ const TableSiup: React.FC<TableSiupProps> = ({
                     )
                 }, 1500)
                 setTimeout(() => {
-                  refresh()
+                    refresh()
                 }, 2500)
             }
 
@@ -298,6 +298,7 @@ const TableSiup: React.FC<TableSiupProps> = ({
                             }
                             onClick={() => {
                                 setId(row.original.id)
+                                router.push(`/siup/detail/${row.original.id}`)
                             }}
                         >
                             Detail

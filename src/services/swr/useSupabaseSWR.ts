@@ -26,20 +26,25 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
 
     const url = new URL(`${BASE_URL}/rest/v1/${table}`)
     url.searchParams.append('select', params?.select || '*')
+    
+    for (const rawKey in filter) {
+        const val = filter[rawKey]
+        if (!val) continue
 
-    if (filter) {
-        for (const rawKey in filter) {
-            const val = filter[rawKey]
-            if (!val) continue
+        const [key, operator] = rawKey.split('.')
 
-            const [key, operator] = rawKey.split('.')
-            if (operator) {
-                // contoh: created_at.gte => created_at=gte.2024-01-01
-                url.searchParams.append(key, `${operator}.${val}`)
-            } else {
-                // fallback default: ilike
-                url.searchParams.append(key, `ilike.*${val}*`)
-            }
+        // Cek apakah value adalah UUID (panjang 36 dan ada 4 tanda '-')
+        const isUUID =
+            typeof val === 'string' &&
+            val.length === 36 &&
+            (val.match(/-/g) || []).length === 4
+
+        if (operator) {
+            url.searchParams.append(key, `${operator}.${val}`)
+        } else if (isUUID) {
+            url.searchParams.append(key, `eq.${val}`)
+        } else {
+            url.searchParams.append(key, `ilike.*${val}*`)
         }
     }
 
@@ -47,7 +52,6 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
     const to = from + pageSize - 1
     // url.searchParams.append('offset', page.toString())
     // url.searchParams.append('limit', pageSize.toString())
-
 
     if (order) {
         url.searchParams.append(
@@ -70,7 +74,6 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
         method: 'GET',
         headers,
         cache: 'no-store',
-
     })
 
     if (!res.ok) throw new Error(`Failed to fetch from ${table}`)
