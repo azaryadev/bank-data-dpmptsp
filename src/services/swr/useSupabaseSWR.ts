@@ -11,7 +11,7 @@ type Filter = { [key: string]: string }
 interface SupabaseSWRParams {
     filter?: Filter
     page?: number
-    pageSize?: number
+    pageSize?: number | null
     order?: { column: string; ascending?: boolean }
     select?: string // 👈 untuk relasi atau kolom spesifik
 }
@@ -48,8 +48,8 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
         }
     }
 
-    const from = (page - 1) * pageSize
-    const to = from + pageSize - 1
+    const from = (page - 1) * (pageSize || 10)
+    const to = from + (pageSize || 10) - 1
     // url.searchParams.append('offset', page.toString())
     // url.searchParams.append('limit', pageSize.toString())
 
@@ -68,7 +68,9 @@ const fetcher = async ([table, params]: [string, SupabaseSWRParams]) => {
     }
 
     // Tambahkan header Range untuk pagination
-    headers['Range'] = `${from}-${to}`
+    if (pageSize !== null) {
+        headers['Range'] = `${from}-${to}`
+    }
 
     const res = await fetch(url.toString(), {
         method: 'GET',

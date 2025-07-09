@@ -1,14 +1,15 @@
 'use client'
 import React, { useMemo, useState } from 'react'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import {
     Tooltip,
     Table,
     Button,
-    Tag,
     Pagination,
     Select,
+    toast,
+    Notification,
 } from '@/components/ui'
 import classNames from '@/utils/classNames'
 import {
@@ -24,6 +25,9 @@ import {
 } from '@tanstack/react-table'
 
 import moment from 'moment'
+
+import { useSupabaseMutation } from '@/services/swr/useSupabaseMutation'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 const { Tr, Th, Td, THead, TBody, Sorter } = Table
 
@@ -86,7 +90,7 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
 }) => {
     const totalData = data ? data.length : 0
 
-    // const router = useRouter()
+    const router = useRouter()
 
     const handleSortingChange: OnChangeFn<SortingState> = (updaterOrValue) => {
         if (typeof updaterOrValue === 'function') {
@@ -96,8 +100,60 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
         }
     }
 
+    const {
+        mutate,
+        isLoading: isLoadingDelete,
+        error: errorDelete,
+    } = useSupabaseMutation('rekap_izin', 'DELETE')
+
+    const [isConfirmDelete, setIsConfirmDelete] = useState(false)
+
     const [id, setId] = useState<string | undefined>(undefined)
     console.log('selected id: ', id)
+
+    const onHandleDelete = async (id: string | undefined): Promise<void> => {
+        if (id === undefined) return
+
+        try {
+            const res = await mutate(undefined, { id })
+
+            if (res) {
+                setTimeout(() => {
+                    setIsConfirmDelete(false)
+                }, 500)
+
+                setTimeout(() => {
+                    toast.push(
+                        <Notification title="Success" type="success">
+                            Successfully delete data
+                        </Notification>,
+                    )
+                }, 1500)
+                setTimeout(() => {
+                    refresh()
+                }, 2500)
+            }
+
+            if (errorDelete) {
+                setIsConfirmDelete(true)
+                setTimeout(() => {
+                    toast.push(
+                        <Notification title="Error" type="danger">
+                            Error to deleting data.
+                        </Notification>,
+                    )
+                }, 500)
+            }
+        } catch (error) {
+            if (error || errorDelete) {
+                toast.push(
+                    <Notification title="Error" type="danger">
+                        Failed to delete data.
+                    </Notification>,
+                )
+            }
+        }
+    }
 
     const columns = useMemo<ColumnDef<BodyPerizinan>[]>(
         () => [
@@ -183,13 +239,10 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
                     const value = getValue() as boolean
 
                     return (
-                        <div
-                            style={{ width: '100px', minWidth: '100px' }}
-                            className="text-center"
-                        >
-                            <Tag className="bg-emerald-100 py-1 px-2.5 text-emerald-600 border-0 rounded">
-                                {value}
-                            </Tag>
+                        <div style={{ width: '100px', minWidth: '100px' }}>
+                            {/* <Tag className="bg-emerald-100 py-1 px-2.5 text-emerald-600 border-0 rounded"> */}
+                            {value}
+                            {/* </Tag> */}
                         </div>
                     )
                 },
@@ -247,6 +300,9 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
                             }
                             onClick={() => {
                                 setId(row.original.id)
+                                router.push(
+                                    `/perizinan/detail/${row.original.id}`,
+                                )
                             }}
                         >
                             Detail
@@ -265,7 +321,11 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
                                         'hover:bg-yellow-600',
                                 )
                             }
-                            onClick={() => {}}
+                            onClick={() => {
+                                router.push(
+                                    `/perizinan/update/${row.original.id}`,
+                                )
+                            }}
                         >
                             Update
                         </Button>
@@ -283,7 +343,10 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
                                         'hover:bg-red-600',
                                 )
                             }
-                            onClick={() => {}}
+                            onClick={() => {
+                                setId(row.original.id)
+                                setIsConfirmDelete(true)
+                            }}
                         >
                             Delete
                         </Button>
@@ -291,7 +354,7 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
                 ),
             },
         ],
-        [],
+        [router],
     )
 
     const table = useReactTable({
@@ -418,6 +481,28 @@ const TablePerizinan: React.FC<TablePerizinanProps> = ({
                     />
                 </div>
             </div>
+
+            <ConfirmDialog
+                isOpen={isConfirmDelete}
+                title="Delete Data"
+                confirmText={isLoadingDelete ? 'Deleting...' : 'Yes'}
+                cancelText="Cancel"
+                type="warning"
+                closable={false}
+                onCancel={() => {
+                    setIsConfirmDelete(false)
+                }}
+                onConfirm={() => {
+                    onHandleDelete(id)
+                }}
+            >
+                <p>
+                    You’re about to permanently delete this data and its
+                    dependencies. <br />
+                    <br />
+                    If you’re not sure, you can select cancel instead
+                </p>
+            </ConfirmDialog>
         </>
     )
 }

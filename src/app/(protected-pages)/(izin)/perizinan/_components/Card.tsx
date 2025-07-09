@@ -28,10 +28,13 @@ import { SortingState } from '@tanstack/react-table'
 import { useSupabaseSWR } from '@/services/swr/useSupabaseSWR'
 import { IoCreateOutline } from 'react-icons/io5'
 import { selectRelation } from '@/utils/selectRelation'
+import { useRouter } from 'next/navigation'
 
 type DateFormType = z.infer<typeof validationDateParams>
 
 const CardPerizinan = () => {
+    const router = useRouter()
+
     const {
         setValue,
         formState: { errors },
@@ -111,7 +114,9 @@ const CardPerizinan = () => {
                     <Button
                         className=" items-center flex gap-2"
                         size="sm"
-                        onClick={() => {}}
+                        onClick={() => {
+                            router.push('/perizinan/create')
+                        }}
                         icon={<IoCreateOutline />}
                         iconAlignment="start"
                     >

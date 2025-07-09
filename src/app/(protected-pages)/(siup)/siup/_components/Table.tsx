@@ -348,7 +348,7 @@ const TableSiup: React.FC<TableSiupProps> = ({
                 ),
             },
         ],
-        [],
+        [router],
     )
 
     const table = useReactTable({
