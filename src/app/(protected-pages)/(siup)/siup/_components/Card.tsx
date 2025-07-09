@@ -10,6 +10,8 @@ import {
     // Notification,
     // toast,
     FormItem,
+    toast,
+    Notification,
 } from '@/components/ui'
 
 import useDebounce from '@/utils/hooks/useDebounce'
@@ -29,6 +31,7 @@ import { IoCreateOutline } from 'react-icons/io5'
 import { selectRelation } from '@/utils/selectRelation'
 
 import { useRouter } from 'next/navigation'
+import { FaFileExcel } from 'react-icons/fa'
 
 type DateFormType = z.infer<typeof validationDateParams>
 
@@ -122,17 +125,37 @@ const CardSiup = () => {
             <div className="flex flex-col justify-between gap-y-4 mb-8">
                 <div className=" flex flex-col md:flex-row items-center justify-between">
                     <h5 className="uppercase">Siup Data</h5>
-                    <Button
-                        className=" items-center flex gap-2"
-                        size="sm"
-                        onClick={() => {
-                            router.push('/siup/create')
-                        }}
-                        icon={<IoCreateOutline />}
-                        iconAlignment="start"
-                    >
-                        Create
-                    </Button>
+                    <div className=" flex gap-x-4 items-center">
+                        <Button
+                            variant="solid"
+                            className=" items-center flex gap-2 bg-green-600 hover:bg-green-900"
+                            size="sm"
+                            onClick={() => {
+                                toast.push(
+                                    <Notification
+                                        type="success"
+                                        title="Success Downloaded!"
+                                    />,
+                                    { placement: 'top-center' },
+                                )
+                            }}
+                            icon={<FaFileExcel />}
+                            iconAlignment="start"
+                        >
+                            Download .csv
+                        </Button>
+                        <Button
+                            className=" items-center flex gap-2"
+                            size="sm"
+                            onClick={() => {
+                                router.push('/siup/create')
+                            }}
+                            icon={<IoCreateOutline />}
+                            iconAlignment="start"
+                        >
+                            Create
+                        </Button>
+                    </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-4  items-center">
                     <FormItem>
