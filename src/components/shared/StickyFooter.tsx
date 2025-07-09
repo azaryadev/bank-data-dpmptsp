@@ -15,12 +15,12 @@ const StickyFooter = (props: StickyFooterProps) => {
 
     const [isSticky, setIsSticky] = useState(false)
     const ref = useRef<HTMLDivElement>(null)
+    const [pendingSticky, setPendingSticky] = useState(false);
+    const debouncedSticky = useDebounce(pendingSticky, 100);
 
-    function handleDebounceFn(val: boolean) {
-        setIsSticky(val)
-    }
-
-    const debounceFn = useDebounce(handleDebounceFn, 100)
+    useEffect(() => {
+        setIsSticky(debouncedSticky);
+    }, [debouncedSticky]);
 
     useEffect(() => {
         const cachedRef = ref.current
@@ -37,7 +37,7 @@ const StickyFooter = (props: StickyFooterProps) => {
                         behavior: 'smooth',
                     })
                 }
-                debounceFn(e.intersectionRatio < 1)
+                setPendingSticky(e.intersectionRatio < 1)
             },
             {
                 threshold: [1],
