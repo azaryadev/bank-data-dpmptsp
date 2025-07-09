@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/(protected-pages)/(izin)/surat-izin/update/[id]"  ],
   "exclude": [
     "node_modules"
   ]

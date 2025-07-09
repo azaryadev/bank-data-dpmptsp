@@ -10,8 +10,12 @@ import { SortingState } from '@tanstack/react-table'
 import { useSupabaseSWR } from '@/services/swr/useSupabaseSWR'
 import { IoCreateOutline } from 'react-icons/io5'
 import useDebounce from '@/utils/hooks/useDebounce'
+import { useRouter } from 'next/navigation'
 
 const CardSuratIzin = () => {
+
+    const router = useRouter()
+
     const [page, setPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [sorting, setSorting] = useState<SortingState>([]) // State for sorting
@@ -67,7 +71,7 @@ const CardSuratIzin = () => {
                     <Button
                         className=" items-center flex gap-2"
                         size="sm"
-                        onClick={() => {}}
+                        onClick={() => {router.push("/surat-izin/create")}}
                         icon={<IoCreateOutline />}
                         iconAlignment="start"
                     >

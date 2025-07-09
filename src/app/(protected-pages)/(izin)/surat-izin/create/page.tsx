@@ -1,11 +1,12 @@
 'use client'
-import React, { use, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Controller, useForm } from 'react-hook-form'
 import { z, ZodType } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import useCurrentSession from '@/utils/hooks/useCurrentSession'
 import { useSupabaseMutation } from '@/services/swr/useSupabaseMutation'
 import {
     Button,
@@ -17,31 +18,19 @@ import {
     toast,
 } from '@/components/ui'
 
-import { KategoriUsahaData } from '@/@types/kategoriUsaha'
+import { SuratIzinData } from '@/@types/suratIzin'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { useSupabaseSWR } from '@/services/swr/useSupabaseSWR'
 
-const validationSchema: ZodType<KategoriUsahaData> = z.object({
+const validationSchema: ZodType<SuratIzinData> = z.object({
     name: z.string().min(1, 'Name is required'),
-    description: z.string().min(1, 'Description is required'),
 })
 
-const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
-    const { id: idParams } = use(params)
+const PageCreate = () => {
     const router = useRouter()
 
-    const { data } = useSupabaseSWR('kategori_usaha', {
-        select: '*',
-        filter: { id: idParams },
-    })
+    const { session } = useCurrentSession()
 
-    const selectedData = data?.data[0] as KategoriUsahaData
-
-    const {
-        mutate,
-        isLoading,
-        error: errorUpdate,
-    } = useSupabaseMutation('kategori_usaha', 'PATCH')
+    const userId = session.user?.profile.id
 
     const {
         watch,
@@ -50,21 +39,18 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
         // trigger,
         formState: { errors },
         control,
-    } = useForm<KategoriUsahaData>({
+    } = useForm<SuratIzinData>({
         resolver: zodResolver(validationSchema),
     })
 
     const [isConfirmDialogOpen, setConfirmDialogOpen] = useState(false)
     const [isConfirmCancel, setConfirmCancel] = useState(false)
 
-    useEffect(() => {
-        if (selectedData) {
-            reset({
-                name: selectedData.name,
-                description: selectedData.description,
-            })
-        }
-    }, [reset, selectedData])
+    const {
+        mutate,
+        isLoading,
+        error: errorCreate,
+    } = useSupabaseMutation('surat_izin', 'POST')
 
     const onHandleBack = () => {
         const obj = watch()
@@ -90,19 +76,19 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
         reset()
     }
 
-    const [formData, setFormData] = useState<KategoriUsahaData>()
+    const [formData, setFormData] = useState<SuratIzinData>()
 
-    const onSubmit = (data: KategoriUsahaData) => {
+    const onSubmit = (data: SuratIzinData) => {
         setFormData(data)
         setConfirmDialogOpen(true)
     }
 
     const onHandleSubmit = async () => {
-        const data = { ...formData }
+        const data = { ...formData, created_by: userId }
         console.log('data to submit', data)
 
         try {
-            const res = await mutate(data, { id: idParams })
+            const res = await mutate(data)
 
             if (res) {
                 setTimeout(() => {
@@ -113,34 +99,34 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
                 setTimeout(() => {
                     toast.push(
                         <Notification title="Success" type="success">
-                            Successfully update data kategori usaha
+                            Successfully create surat izin
                         </Notification>,
                     )
                 }, 1500)
                 setTimeout(() => {
-                    router.push('/kategori-usaha')
+                    router.push('/surat-izin')
                 }, 2500)
             }
 
-            if (errorUpdate) {
+            if (errorCreate) {
                 setConfirmDialogOpen(true)
                 setTimeout(() => {
                     toast.push(
                         <Notification title="Error" type="danger">
-                            Error to update data kategori usaha
+                            Error to create surat izin
                         </Notification>,
                     )
                 }, 500)
             }
         } catch (error) {
-            if (error || errorUpdate) {
+            if (error || errorCreate) {
                 setTimeout(() => {
                     setConfirmDialogOpen(false)
                 }, 500)
                 setTimeout(() => {
                     toast.push(
                         <Notification title="Error" type="danger">
-                            Failed update data kategori usaha!
+                            Failed create surat izin!
                         </Notification>,
                     )
                 }, 1500)
@@ -152,7 +138,7 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
         <main>
             <Card>
                 <div className=" flex flex-col">
-                    <h4 className="mb-8">Update Kategori Usaha Data</h4>
+                    <h4 className="mb-8">Create Surat Izin Data</h4>
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-x-4  items-start">
                             <FormItem
@@ -174,27 +160,6 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
                                     )}
                                 />
                             </FormItem>
-                            <FormItem
-                                asterisk
-                                label="Description"
-                                invalid={Boolean(errors.description)}
-                                errorMessage={errors.description?.message}
-                            >
-                                <Controller
-                                    name="description"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Input
-                                            textArea
-                                            rows={5}
-                                            type="text"
-                                            autoComplete="off"
-                                            placeholder="Please input description..."
-                                            {...field}
-                                        />
-                                    )}
-                                />
-                            </FormItem>
                         </div>
                         <div className="text-right mt-6">
                             <Button
@@ -209,7 +174,7 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
                                 variant="solid"
                                 type="submit"
                             >
-                                Update
+                                Create
                             </Button>
                         </div>
                     </Form>
@@ -220,8 +185,8 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
                 isOpen={isConfirmDialogOpen || isConfirmCancel}
                 title={
                     isConfirmCancel
-                        ? 'Cancel Update Kategori Usaha Data'
-                        : 'Update  Kategori Usaha Data'
+                        ? 'Cancel Create Surat Izin Data'
+                        : 'Create  Surat Izin Data'
                 }
                 confirmText={
                     isLoading
@@ -252,4 +217,4 @@ const PageUpdate = ({ params }: { params: Promise<{ id: string }> }) => {
     )
 }
 
-export default PageUpdate
+export default PageCreate
