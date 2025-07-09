@@ -1,4 +1,5 @@
 import type { JSX } from 'react'
+import { FaUserLock } from 'react-icons/fa'
 
 import { HiDocument, HiHome, HiDocumentText } from 'react-icons/hi2'
 
@@ -9,6 +10,7 @@ const navigationIcon: NavigationIcons = {
 
     document: <HiDocument />,
     document2: <HiDocumentText />,
+    userAccount: <FaUserLock />
 }
 
 export default navigationIcon

@@ -1,7 +1,7 @@
 import {
     NAV_ITEM_TYPE_TITLE,
     NAV_ITEM_TYPE_ITEM,
-    // NAV_ITEM_TYPE_COLLAPSE,
+    NAV_ITEM_TYPE_COLLAPSE,
 } from '@/constants/navigation.constant'
 
 import type { NavigationTree } from '@/@types/navigation'
@@ -74,6 +74,37 @@ const navigationConfig: NavigationTree[] = [
                 title: 'Surat Izin',
                 translateKey: 'nav.izin.suratizin',
                 icon: 'document2',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
+        ],
+    },
+    {
+        key: 'userAccount',
+        path: '',
+        title: 'User Account',
+        translateKey: 'nav.userAccount',
+        icon: 'userAccount',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+            {
+                key: 'userAccount.user',
+                path: '/user-account',
+                title: 'User',
+                translateKey: 'nav.userAccount.user',
+                icon: 'userAccount',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
+            {
+                key: 'userAccount.roles',
+                path: '/roles',
+                title: 'Roles',
+                translateKey: 'nav.userAccount.roles',
+                icon: 'userAccount',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [],
                 subMenu: [],
