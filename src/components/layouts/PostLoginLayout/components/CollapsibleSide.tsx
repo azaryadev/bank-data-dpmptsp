@@ -8,6 +8,8 @@ import UserProfileDropdown from '@/components//template/UserProfileDropdown'
 import LayoutBase from '@/components//template/LayoutBase'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
+import Search from '@/components/template/Search'
+import FullScreen from '@/components/template/Fullscreen'
 
 const CollapsibleSide = ({ children }: CommonProps) => {
     return (
@@ -24,10 +26,13 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                             <>
                                 <MobileNav />
                                 <SideNavToggle />
+                                <Search />
                             </>
                         }
                         headerEnd={
                             <>
+                                <FullScreen />
+
                                 <UserProfileDropdown hoverable={false} />
                             </>
                         }

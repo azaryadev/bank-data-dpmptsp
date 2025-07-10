@@ -11,7 +11,7 @@ export const protectedRoutes: Routes = {
         },
     },
     '/siup': {
-        key: 'siup',
+        key: 'siup.data',
         authority: [],
         meta: {
             pageBackgroundType: 'plain',
@@ -27,7 +27,7 @@ export const protectedRoutes: Routes = {
         },
     },
     '/perizinan': {
-        key: 'izin',
+        key: 'izin.data',
         authority: [],
         meta: {
             pageBackgroundType: 'plain',

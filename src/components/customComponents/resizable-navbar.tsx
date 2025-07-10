@@ -241,9 +241,9 @@ export const NavbarLogo = () => {
         >
             <Image
                 priority
-                src="/img/logo/logo-light-streamline.png"
+                src="/img/logo/main-logo.png"
                 alt="logo"
-                width={60}
+                width={120}
                 height={60}
             />
         </Link>

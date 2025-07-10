@@ -8,6 +8,7 @@ import HorizontalNav from '@/components/template/HorizontalNav'
 import LayoutBase from '@/components//template/LayoutBase'
 import { LAYOUT_TOP_BAR_CLASSIC } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
+import Search from '@/components/template/Search'
 
 const TopBarClassic = ({ children }: CommonProps) => {
     return (
@@ -29,6 +30,7 @@ const TopBarClassic = ({ children }: CommonProps) => {
                         headerMiddle={<HorizontalNav />}
                         headerEnd={
                             <>
+                                <Search />
                                 <UserProfileDropdown hoverable={false} />
                             </>
                         }

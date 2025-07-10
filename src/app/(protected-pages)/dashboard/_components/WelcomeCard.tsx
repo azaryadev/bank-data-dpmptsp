@@ -23,7 +23,7 @@ const WelcomeCard = () => {
             className=" relative bg-primary shadow-lg min-h-[250px] overflow-hidden flex items-center"
         >
             <div className="">
-                <h2 className="text-[#00438c] mb-2">Hello, {fullName}!</h2>
+                <h2 className="text-white mb-2">Hello, {fullName}!</h2>
                 <p className="text-white  mb-6">
                     Welcome to this dashboard!
                 </p>

@@ -10,9 +10,9 @@ const PublicFooter = () => {
                 <div className=" col-span-2">
                     <Image
                         alt="logo"
-                        src={'/img/logo/logo-light-full.png'}
-                        width={120}
-                        height={70}
+                        src={'/img/logo/main-logo.png'}
+                        width={200}
+                        height={100}
                     />
                     <p className="mt-4 text-black">
                         Aplikasi bank data dengan antarmuka publik untuk insight
@@ -48,3 +48,7 @@ const PublicFooter = () => {
 }
 
 export default PublicFooter
+
+
+// F1B700 - orange
+// 00923F - green

@@ -31,7 +31,32 @@ type SearchResult = {
 const recommendedSearch: SearchResult[] = [
     {
         title: 'Recommended',
-        data: [],
+        data: [
+            {
+                key: 'siup.data',
+                path: `/siup`,
+                title: 'SIUP',
+                icon: 'document',
+                category: 'siup',
+                categoryTitle: 'SIUP Data',
+            },
+            {
+                key: 'izin.data',
+                path: `/perizinan`,
+                title: 'Perizinan',
+                icon: 'document',
+                category: 'izin',
+                categoryTitle: 'Perizinan Data',
+            },
+            {
+                key: 'userAccount.user',
+                path: `/user-account`,
+                title: 'User',
+                icon: 'userAccount',
+                category: 'useraccount',
+                categoryTitle: 'User Account',
+            },
+        ],
     },
 ]
 

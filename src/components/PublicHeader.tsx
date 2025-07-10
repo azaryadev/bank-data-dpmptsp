@@ -44,7 +44,7 @@ const PublicHeader = () => {
                     <NavbarButton
                         href={'/sign-in'}
                         variant="secondary"
-                        className="bg-black text-white hover:bg-gray-600 hover:text-white"
+                        className="bg-[#f1b700] text-white hover:bg-[#d8a300] hover:text-white"
                     >
                         Login
                     </NavbarButton>

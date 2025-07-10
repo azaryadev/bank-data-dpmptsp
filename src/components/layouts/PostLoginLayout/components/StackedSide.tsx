@@ -7,6 +7,7 @@ import UserProfileDropdown from '@/components//template/UserProfileDropdown'
 import LayoutBase from '@/components//template/LayoutBase'
 import { LAYOUT_STACKED_SIDE } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
+import Search from '@/components/template/Search'
 
 const StackedSide = ({ children }: CommonProps) => {
     return (
@@ -19,7 +20,12 @@ const StackedSide = ({ children }: CommonProps) => {
                 <div className="flex flex-col flex-auto min-h-screen min-w-0 relative w-full">
                     <Header
                         className="shadow-sm dark:shadow-2xl"
-                        headerStart={<MobileNav />}
+                        headerStart={
+                            <>
+                                <MobileNav /> 
+                                <Search />
+                            </>
+                        }
                         headerEnd={
                             <>
                                 <UserProfileDropdown hoverable={false} />

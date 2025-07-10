@@ -27,11 +27,11 @@ const SignIn = ({
 
     return (
         <>
-            <div className="mb-8">
+            <div className="mb-4">
                 <Logo
-                    type="streamline"
+                    type="full"
                     mode={mode}
-                    logoWidth={60}
+                    logoWidth={200}
                     logoHeight={60}
                 />
             </div>

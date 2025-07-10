@@ -12,6 +12,7 @@ import useScrollTop from '@/utils/hooks/useScrollTop'
 import { LAYOUT_FRAMELESS_SIDE } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
 import type { FooterPageContainerType } from '@/components/template/Footer'
+import Search from '@/components/template/Search'
 
 const FrameLessSide = ({ children }: CommonProps) => {
     const { isSticky } = useScrollTop()
@@ -91,6 +92,7 @@ const FrameLessSide = ({ children }: CommonProps) => {
                                 <>
                                     <MobileNav />
                                     <SideNavToggle />
+                                    <Search />
                                 </>
                             }
                             headerEnd={

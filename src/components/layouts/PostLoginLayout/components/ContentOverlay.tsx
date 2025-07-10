@@ -11,6 +11,7 @@ import useScrollTop from '@/utils/hooks/useScrollTop'
 import { LAYOUT_CONTENT_OVERLAY } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
 import type { FooterPageContainerType } from '@/components/template/Footer'
+import Search from '@/components/template/Search'
 
 const ContentOverlay = ({ children }: CommonProps) => {
     const { isSticky } = useScrollTop()
@@ -110,6 +111,7 @@ const ContentOverlay = ({ children }: CommonProps) => {
                         headerMiddle={<HorizontalNav />}
                         headerEnd={
                             <>
+                                <Search />
                                 <UserProfileDropdown hoverable={false} />
                             </>
                         }
